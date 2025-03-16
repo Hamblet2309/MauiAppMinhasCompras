@@ -4,9 +4,9 @@ namespace MauiAppMinhasCompras
 {
     public partial class App : Application
     {
-        static SQLiteDatabaseHelper _db;
+        static SQLiteDataBaseHelper _db;
 
-        public static SQLiteDatabaseHelper Db
+        public static SQLiteDataBaseHelper Db
         {
             get
             {
@@ -17,7 +17,7 @@ namespace MauiAppMinhasCompras
                             Environment.SpecialFolder.LocalApplicationData),
                         "banco_sqlite_compras.db3");
 
-                    _db = new SQLiteDatabaseHelper(path);
+                    _db = new SQLiteDataBaseHelper(path);
                 }
 
                 return _db;
