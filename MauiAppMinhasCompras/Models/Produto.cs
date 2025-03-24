@@ -31,7 +31,7 @@ namespace MauiAppMinhasCompras.Models
             {
                 if (value <= 0)
                 {
-                    throw new Exception("Por favor, preencha uma quantidade válida maior que 0");
+                    throw new Exception("Por favor, retorne e preencha a quantidade corretamente");
                 }
                 _quantidade = value;
             }
@@ -45,7 +45,7 @@ namespace MauiAppMinhasCompras.Models
             {
                 if (value <= 0)
                 {
-                    throw new Exception("Por favor, preencha um preço válido maior que 0");
+                    throw new Exception("Por favor, preencha com um valor maior que 0");
                 }
                 _preco = value;
             }
