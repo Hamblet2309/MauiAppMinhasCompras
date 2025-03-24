@@ -6,7 +6,7 @@ public partial class EditarProduto : ContentPage
 {
 	public EditarProduto()
 	{
-		InitializeComponent();
+        InitializeComponent();
 	}
 
     private async void ToolbarItem_Clicked(object sender, EventArgs e)
