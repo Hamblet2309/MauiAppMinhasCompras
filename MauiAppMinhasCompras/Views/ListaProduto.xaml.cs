@@ -1,6 +1,5 @@
 ﻿using MauiAppMinhasCompras.Models;
 using System.Collections.ObjectModel;
-using System.Linq.Expressions;
 
 namespace MauiAppMinhasCompras.Views;
 
@@ -19,18 +18,17 @@ public partial class ListaProduto : ContentPage
     {
         try
         {
+            lista.Clear();
             List<Produto> tmp = await App.Db.GetAll();
 
             tmp.ForEach(i => lista.Add(i));
-
         }
         catch (Exception ex)
         {
-
             await DisplayAlert("Ops", ex.Message, "OK");
         }
-
     }
+
 
     private void ToolbarItem_Clicked(object sender, EventArgs e)
     {
@@ -49,8 +47,9 @@ public partial class ListaProduto : ContentPage
     {
         try
         {
-
             string q = e.NewTextValue;
+
+            lst_produtos.IsRefreshing = true;
 
             lista.Clear();
 
@@ -62,13 +61,17 @@ public partial class ListaProduto : ContentPage
         {
             await DisplayAlert("Ops", ex.Message, "OK");
         }
+        finally
+        {
+            lst_produtos.IsRefreshing = false;
+        }
     }
 
     private void ToolbarItem_Clicked_1(object sender, EventArgs e)
     {
         double soma = lista.Sum(i => i.Total);
 
-        string msg = $"O total � {soma:C}";
+        string msg = $"O total   {soma:C}";
 
         DisplayAlert("Total dos Produtos", msg, "OK");
     }
@@ -77,23 +80,22 @@ public partial class ListaProduto : ContentPage
     {
         try
         {
-            MenuItem selecionado = sender as MenuItem;
+            MenuItem selecinado = sender as MenuItem;
 
-            Produto p = selecionado.BindingContext as Produto;
+            Produto p = selecinado.BindingContext as Produto;
 
             bool confirm = await DisplayAlert(
-                "Tem certeza?", $"Remover {p.Descricao}?", "Sim", "Não");
+                "Tem Certeza?", $"Remover {p.Descricao}?", "Sim", "N o");
 
             if (confirm)
             {
                 await App.Db.Delete(p.Id);
-
                 lista.Remove(p);
             }
         }
         catch (Exception ex)
         {
-             await DisplayAlert("Ops", ex.Message, "OK");
+            await DisplayAlert("Ops", ex.Message, "OK");
         }
     }
 
@@ -104,15 +106,40 @@ public partial class ListaProduto : ContentPage
             Produto p = e.SelectedItem as Produto;
 
             Navigation.PushAsync(new Views.EditarProduto
-                {
+            {
                 BindingContext = p,
             });
         }
-
         catch (Exception ex)
         {
             DisplayAlert("Ops", ex.Message, "OK");
         }
-
     }
+
+    private async void lst_produtos_Refreshing(object sender, EventArgs e)
+    {
+        try
+        {
+            lista.Clear();
+
+            List<Produto> tmp = await App.Db.GetAll();
+
+            tmp.ForEach(i => lista.Add(i));
+        }
+        catch (Exception ex)
+        {
+            await DisplayAlert("Ops", ex.Message, "OK");
+
+        }
+        finally
+        {
+            lst_produtos.IsRefreshing = false;
+        }
+    }
+
+    private void ToolbarItem_Clicked_2(object sender, EventArgs e)
+    {
+        Navigation.PushAsync(new Views.RelatorioCategoria());
+    }
+
 }
